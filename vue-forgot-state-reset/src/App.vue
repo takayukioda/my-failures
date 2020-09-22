@@ -1,28 +1,128 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container">
+      <div class="row">
+        <div class="column">
+          <label>組織名 (selected: {{ organizationId }})</label>
+          <select
+            v-model="organizationId"
+            v-on:change="onSelectOrganization();"
+          >
+            <option
+              v-for="org in organizations"
+              v-bind:value="org.id"
+            >
+              {{ org.name }}
+            </option>
+          </select>
+        </div>
+        <div class="column">
+          <label>プロジェクト名 (selected: {{ projectId }})</label>
+          <select
+            v-model="projectId"
+            v-on:change="onSelectProject();"
+          >
+            <option
+              v-for="proj in projects"
+              v-bind:value="proj.id"
+            >
+              {{ proj.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <h5>プロジェクトメンバー選択</h5>
+          <div
+            v-for="mem in members"
+          >
+            <input
+              type="checkbox"
+              v-model="selected"
+              v-bind:value="mem.email"
+              v-bind:id="`member-${mem.id}`"
+            >
+              <label
+                class="label-inline"
+                v-bind:for="`member-${mem.id}`"
+              >
+                {{ mem.email }}</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column centerize">
+          <button
+            class="button"
+            v-on:click="onClickSend();"
+          >
+            送信
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <h5>送信リスト</h5>
+          <ul>
+            <li
+              v-for="item in sending"
+            >
+              {{ item }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { Organizations, Projects, ProjectMembers } from './data';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data() {
+    return {
+      organizations: [],
+      projects: [],
+      members: [],
+      selected: [],
+      organizationId: null,
+      projectId: null,
+      sending: [],
+    };
+  },
+  created() {
+    this.organizations = Organizations;
+  },
+  methods: {
+    onSelectOrganization() {
+      this.sending = [];
+      if (this.organizationId === null) {
+        this.projects = [];
+      }
+      this.projects = Projects.filter((p) => p.organizationId === this.organizationId);
+    },
+    onSelectProject() {
+      this.sending = [];
+      if (this.projectId === null) {
+        this.members = [];
+      }
+      this.members = ProjectMembers.filter((m) => m.projectId === this.projectId);
+    },
+    onClickSend() {
+      this.sending = this.selected;
+    },
+  },
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin-top: 2.8rem;
+}
+.column.centerize {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
