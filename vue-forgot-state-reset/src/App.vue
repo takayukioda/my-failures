@@ -66,7 +66,7 @@
           <h5>送信リスト</h5>
           <ul>
             <li
-              v-for="item in sending"
+              v-for="item in send"
             >
               {{ item }}
             </li>
@@ -90,7 +90,7 @@ export default {
       selected: [],
       organizationId: null,
       projectId: null,
-      sending: [],
+      send: [],
     };
   },
   created() {
@@ -98,21 +98,21 @@ export default {
   },
   methods: {
     onSelectOrganization() {
-      this.sending = [];
+      // this.selected = []; // この様に初期化する必要があった
       if (this.organizationId === null) {
         this.projects = [];
       }
       this.projects = Projects.filter((p) => p.organizationId === this.organizationId);
     },
     onSelectProject() {
-      this.sending = [];
+      // this.selected = []; // この様に初期化する必要があった
       if (this.projectId === null) {
         this.members = [];
       }
       this.members = ProjectMembers.filter((m) => m.projectId === this.projectId);
     },
     onClickSend() {
-      this.sending = this.selected;
+      this.send = this.selected;
     },
   },
 }
