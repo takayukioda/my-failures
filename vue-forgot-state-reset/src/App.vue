@@ -87,7 +87,7 @@ export default {
       organizations: [],
       projects: [],
       members: [],
-      selected: [],
+      selected: [], // 問題を起こした state
       organizationId: null,
       projectId: null,
       send: [],
